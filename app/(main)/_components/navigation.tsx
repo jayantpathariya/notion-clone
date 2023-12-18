@@ -11,7 +11,7 @@ import {
   Trash,
 } from "lucide-react";
 import { useMediaQuery } from "usehooks-ts";
-import { useParams, usePathname } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
@@ -32,6 +32,7 @@ import { Navbar } from "./navbar";
 
 export const Navigation = () => {
   const pathname = usePathname();
+  const router = useRouter();
   const params = useParams();
   const isMobile = useMediaQuery("(max-width: 768px)");
   const create = useMutation(api.documents.create);
@@ -123,6 +124,8 @@ export const Navigation = () => {
   const handleCreate = () => {
     const promise = create({
       title: "Untitled",
+    }).then((documentId) => {
+      router.push(`/documents/${documentId}`);
     });
 
     toast.promise(promise, {
